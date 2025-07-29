@@ -1,0 +1,55 @@
+# Deploy Customized Vite site to GitHub pages
+name: Deploy Deno-built Site to GitHub Pages
+
+on:
+  # Run the workflow on push to main and on manual dispatch
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read  # Required for fetching the repo
+  pages: write    # Required for deploying to GitHub Pages
+  id-token: write # Required for authentication during Pages deployment
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Setup Deno environment
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      # Step 3: Install dependencies and build with Vite
+      - name: Build with Vite using Deno
+        run: |
+          deno run build
+
+      # Step 4: Setup Pages configuration
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      # Step 5: Upload the `dist` folder as an artifact for deployment
+      - name: Upload artifact to Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist  # Only upload the built files in the `dist` folder
+
+      # Step 6: Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
