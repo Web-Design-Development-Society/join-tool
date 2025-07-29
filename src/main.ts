@@ -17,11 +17,15 @@ function login() {
 const url = new URL(location.href);
 const code = url.searchParams.get("code");
 
-if (code) {
-  const res = await fetch(
+(async function handleCode() {
+  if (!code) {
+    return;
+  }
+
+  const tokenRes = await fetch(
     `http://localhost:8000/api/authenticate?code=${code}`
   );
-  const { token } = await res.json();
+  const { token } = await tokenRes.json();
 
   const octokit = new Octokit({ auth: token });
   const { data: user } = await octokit.request("GET /user");
@@ -29,35 +33,40 @@ if (code) {
 
   if (emails.every(({ email }) => !email.endsWith("@byui.edu"))) {
     globalThis.alert("You need to have a BYUI email to use this tool!");
-  } else {
-    const res = await fetch("http://localhost:8000/api/invite", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: user.id, username: user.login }),
-    });
-
-    const responseData = await res.json(); // Parse the response as JSON
-
-    if (!res.ok) {
-      // Handle any HTTP errors, like 500, 400, etc.
-      globalThis.alert(
-        "There was an error: " + responseData.message || "Unknown error"
-      );
-    } else {
-      // Handle success or specific statuses
-      if (responseData.status === "already_member") {
-        globalThis.alert(`${user.name || user.login} is already a member!`);
-      } else if (responseData.status === "invited") {
-        (document.querySelector("h1") as HTMLHeadingElement).innerText =
-          "You've been Invited!";
-        btn.removeEventListener("click", login);
-        btn.innerText = "Open Invite URL";
-        btn.onclick = () =>
-          globalThis.open(
-            "https://github.com/orgs/Web-Design-Development-Society/invitation",
-            "_blank"
-          );
-      }
-    }
+    return;
   }
-}
+
+  const res = await fetch("http://localhost:8000/api/invite", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId: user.id, username: user.login }),
+  });
+
+  const responseData = await res.json(); // Parse the response as JSON
+
+  if (!res.ok) {
+    // Handle any HTTP errors, like 500, 400, etc.
+    globalThis.alert(
+      "There was an error: " + responseData.message || "Unknown error"
+    );
+    return;
+  }
+
+  // Handle success or specific statuses
+  if (responseData.status === "already_member") {
+    globalThis.alert(`${user.name || user.login} is already a member!`);
+    return;
+  }
+
+  if (responseData.status === "invited") {
+    (document.querySelector("h1") as HTMLHeadingElement).innerText =
+      "You've been Invited!";
+    btn.removeEventListener("click", login);
+    btn.innerText = "Open Invite URL";
+    btn.onclick = () =>
+      globalThis.open(
+        "https://github.com/orgs/Web-Design-Development-Society/invitation",
+        "_blank"
+      );
+  }
+})();
