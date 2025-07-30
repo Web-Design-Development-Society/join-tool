@@ -5,15 +5,14 @@ import deno from '@deno/vite-plugin'
 export default defineConfig({
   plugins: [deno()],
   base: '/join-tool',
-  build: {
-    target: "esnext",
-    rollupOptions: {
-      external: ["node:process"], // optional: skips bundling
-    },
+  publicDir: "/public",
+  optimizeDeps: {
+    exclude: ["./serverless/**"], // exclude from dependency pre-bundling
   },
-  resolve: {
-    alias: {
-      "node:process": "process/browser",
+  build: {
+    rollupOptions: {
+      input: "index.html", // your frontend entry point
+      external: ["./serverless/**"], // exclude serverless files from build
     },
   },
 })

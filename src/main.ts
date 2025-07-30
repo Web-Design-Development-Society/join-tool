@@ -1,5 +1,3 @@
-import { Octokit } from "https://esm.sh/@octokit/core";
-
 const CLIENT_ID = "Ov23liunYSrQhokkKLKT";
 const scopes = "read:user user:email";
 
@@ -27,11 +25,19 @@ const code = url.searchParams.get("code");
   );
   const { token } = await tokenRes.json();
 
-  const octokit = new Octokit({ auth: token });
-  const { data: user } = await octokit.request("GET /user");
-  const { data: emails } = await octokit.request("GET /user/emails");
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    Accept: "application/vnd.github+json",
+  };
 
-  if (emails.every(({ email }) => !email.endsWith("@byui.edu"))) {
+  const [userRes, emailsRes] = await Promise.all([
+    fetch("https://api.github.com/user", { headers }),
+    fetch("https://api.github.com/user/emails", { headers }),
+  ]);
+
+  const [user, emails] = await Promise.all([userRes.json(), emailsRes.json()]);
+
+  if (emails.every(({ email }: { email: string}) => !email.endsWith("@byui.edu"))) {
     globalThis.alert("You need to have a BYUI email to use this tool!");
     return;
   }
