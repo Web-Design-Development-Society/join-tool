@@ -1,6 +1,6 @@
 const CLIENT_ID = "Ov23liunYSrQhokkKLKT";
 const scopes = "read:user user:email";
-const SERVER_URL = 'join-github-org-es70nk4w6cj1.deno.dev'
+const SERVER_URL = 'https://join-github-org-es70nk4w6cj1.deno.dev'
 
 const btn = document.getElementById("githubLoginBtn") as HTMLButtonElement;
 btn.addEventListener("click", login);
