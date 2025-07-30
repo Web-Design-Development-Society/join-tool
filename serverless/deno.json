@@ -6,6 +6,16 @@
     "@std/assert": "jsr:@std/assert@1"
   },
   "compilerOptions": {
-    "lib": ["deno.ns"]
+    "lib": [
+      "deno.ns"
+    ]
+  },
+  "deploy": {
+    "project": "bb10017c-605d-4a92-967d-dde69eeccdcf",
+    "exclude": [
+      "**/node_modules"
+    ],
+    "include": [],
+    "entrypoint": "main.ts"
   }
 }

@@ -1,5 +1,6 @@
 const CLIENT_ID = "Ov23liunYSrQhokkKLKT";
 const scopes = "read:user user:email";
+const SERVER_URL = 'join-github-org-es70nk4w6cj1.deno.dev'
 
 const btn = document.getElementById("githubLoginBtn") as HTMLButtonElement;
 btn.addEventListener("click", login);
@@ -21,7 +22,7 @@ const code = url.searchParams.get("code");
   }
 
   const tokenRes = await fetch(
-    `http://localhost:8000/api/authenticate?code=${code}`
+    `${SERVER_URL}/api/authenticate?code=${code}`
   );
   const { token } = await tokenRes.json();
 
@@ -42,7 +43,7 @@ const code = url.searchParams.get("code");
     return;
   }
 
-  const res = await fetch("http://localhost:8000/api/invite", {
+  const res = await fetch(`${SERVER_URL}/api/invite`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userId: user.id, username: user.login }),
