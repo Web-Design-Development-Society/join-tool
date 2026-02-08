@@ -1,6 +1,6 @@
 const CLIENT_ID = "Ov23liunYSrQhokkKLKT";
 const scopes = "read:user user:email";
-const SERVER_URL = 'https://join-github-org-es70nk4w6cj1.deno.dev'
+const SERVER_URL = "https://join-github-org-es70nk4w6cj1.deno.dev";
 
 const btn = document.getElementById("githubLoginBtn") as HTMLButtonElement;
 btn.addEventListener("click", login);
@@ -8,7 +8,7 @@ btn.addEventListener("click", login);
 function login() {
   // Redirect to your GitHub OAuth endpoint
   const redirectUrl = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=${encodeURIComponent(
-    scopes
+    scopes,
   )}`;
   globalThis.location.href = redirectUrl;
 }
@@ -21,9 +21,7 @@ const code = url.searchParams.get("code");
     return;
   }
 
-  const tokenRes = await fetch(
-    `${SERVER_URL}/api/authenticate?code=${code}`
-  );
+  const tokenRes = await fetch(`${SERVER_URL}/api/authenticate?code=${code}`);
   const { token } = await tokenRes.json();
 
   const headers = {
@@ -38,7 +36,18 @@ const code = url.searchParams.get("code");
 
   const [user, emails] = await Promise.all([userRes.json(), emailsRes.json()]);
 
-  if (emails.every(({ email }: { email: string}) => !email.endsWith("@byui.edu"))) {
+  type EmailData = {
+    email: string;
+    primary: boolean;
+    verified: boolean;
+    visibility: string | null;
+  };
+
+  const hasBYUIEmail = emails.some(
+    ({ email, verified }: EmailData) => email.endsWith("@byui.edu") && verified,
+  );
+
+  if (!hasBYUIEmail) {
     globalThis.alert("You need to have a BYUI email to use this tool!");
     return;
   }
@@ -54,7 +63,7 @@ const code = url.searchParams.get("code");
   if (!res.ok) {
     // Handle any HTTP errors, like 500, 400, etc.
     globalThis.alert(
-      "There was an error: " + responseData.message || "Unknown error"
+      "There was an error: " + responseData.message || "Unknown error",
     );
     return;
   }
@@ -73,7 +82,7 @@ const code = url.searchParams.get("code");
     btn.onclick = () =>
       globalThis.open(
         "https://github.com/orgs/Web-Design-Development-Society/invitation",
-        "_blank"
+        "_blank",
       );
   }
 })();
