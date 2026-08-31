@@ -1,17 +1,20 @@
 import "./styles.css";
 
-const CLIENT_ID = "Ov23liunYSrQhokkKLKT";
+const SERVER_URL = import.meta.env.VITE_API_URL;
+const CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID;
 const scopes = "read:user user:email";
-const SERVER_URL = "https://join-github-org-rtcd6mpfn82q.deno.dev";
+
+if (!CLIENT_ID) throw new Error("Missing VITE_GITHUB_CLIENT_ID");
+if (!SERVER_URL) throw new Error("Missing VITE_API_URL");
 
 const btn = document.getElementById("githubLoginBtn") as HTMLButtonElement;
 btn.addEventListener("click", login);
 
 function login() {
-  // Redirect to your GitHub OAuth endpoint
+  const prevUrl = globalThis.location.href.split("?")[0];
   const redirectUrl = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=${encodeURIComponent(
     scopes,
-  )}`;
+  )}&redirect_uri=${encodeURIComponent(prevUrl)}`;
   globalThis.location.href = redirectUrl;
 }
 

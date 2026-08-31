@@ -2,9 +2,7 @@ export function cors() {
   const headers = new Headers();
   headers.set(
     "Access-Control-Allow-Origin",
-    Deno.env.get("MODE") === "dev"
-      ? "http://localhost:5173"
-      : "https://web-design-development-society.github.io"
+    Deno.env.get("MODE") === "dev" ? "*" : "https://web-design-development-society.github.io",
   );
 
   // Allow the necessary HTTP methods and headers

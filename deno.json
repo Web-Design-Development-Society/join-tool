@@ -13,5 +13,9 @@
     "vite": "npm:vite@^8.2.2"
   },
   "exclude": ["serverless/", "dist/"],
-  "nodeModulesDir": "auto"
+  "nodeModulesDir": "auto",
+  "deploy": {
+    "org": "wdd-society",
+    "app": "join-tool"
+  }
 }

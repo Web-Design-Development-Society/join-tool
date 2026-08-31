@@ -1,0 +1,30 @@
+# Deploy serverless API to Deno Deploy v2
+name: Deploy Serverless to Deno Deploy
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "serverless/**"
+      - ".github/workflows/deploy-serverless.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Deploy to Deno Deploy
+        env:
+          DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
+        run: deno deploy --org wdd-society --app join-tool --prod --json --non-interactive
