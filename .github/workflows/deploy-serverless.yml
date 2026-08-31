@@ -22,7 +22,7 @@ jobs:
       - name: Setup Deno
         uses: denoland/setup-deno@v2
         with:
-          deno-version: v2.x
+          deno-version: v2.9.5 # TODO - Change to 2.x later. 2.9.6 is completely broken
 
       - name: Deploy to Deno Deploy
         env:
