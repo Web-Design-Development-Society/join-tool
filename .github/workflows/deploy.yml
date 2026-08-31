@@ -38,6 +38,9 @@ jobs:
       - name: Build with Vite using Deno
         run: |
           deno run build
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_GITHUB_CLIENT_ID: ${{ secrets.VITE_GITHUB_CLIENT_ID }}
 
       # Step 4: Setup Pages configuration
       - name: Setup Pages
