@@ -1,4 +1,4 @@
-import { OAuthApp } from "https://esm.sh/@octokit/oauth-app";
+import { OAuthApp } from "@octokit/oauth-app";
 
 export async function handleOAuth(
   req: Request,

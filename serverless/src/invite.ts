@@ -1,6 +1,6 @@
-import { createAppAuth } from "https://esm.sh/@octokit/auth-app";
-import { Octokit } from "https://esm.sh/@octokit/core";
-import type { RequestError } from "https://esm.sh/@octokit/request-error";
+import { createAppAuth } from "@octokit/auth-app";
+import { Octokit } from "@octokit/core";
+import type { RequestError } from "@octokit/request-error";
 
 export async function handleInvite(
   req: Request,
