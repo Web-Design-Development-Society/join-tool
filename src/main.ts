@@ -1,3 +1,5 @@
+import "./styles.css";
+
 const CLIENT_ID = "Ov23liunYSrQhokkKLKT";
 const scopes = "read:user user:email";
 const SERVER_URL = "https://join-github-org-rtcd6mpfn82q.deno.dev";
