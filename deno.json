@@ -9,8 +9,8 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"]
   },
   "imports": {
-    "@deno/vite-plugin": "npm:@deno/vite-plugin@^1.0.0",
-    "vite": "npm:vite@^5.4.9"
+    "@deno/vite-plugin": "npm:@deno/vite-plugin@^2.0.3",
+    "vite": "npm:vite@^8.2.2"
   },
   "exclude": ["serverless/", "dist/"],
   "nodeModulesDir": "auto"
