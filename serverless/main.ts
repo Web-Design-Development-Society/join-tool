@@ -1,6 +1,6 @@
-import { cors } from "./cors.ts";
-import { handleInvite } from "./invite.ts";
-import { handleOAuth } from "./oauth.ts";
+import { cors } from "./src/cors.ts";
+import { handleInvite } from "./src/invite.ts";
+import { handleOAuth } from "./src/oauth.ts";
 
 Deno.serve(async (req) => {
   const headers = cors();
@@ -12,6 +12,10 @@ Deno.serve(async (req) => {
   }
 
   const url = new URL(req.url);
+
+  if (url.pathname === "/health" && req.method === "GET") {
+    return new Response(JSON.stringify({ status: "ok" }), { headers });
+  }
 
   if (url.pathname === "/api/invite" && req.method === "POST") {
     return await handleInvite(req, headers);
