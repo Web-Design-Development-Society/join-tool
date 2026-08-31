@@ -27,4 +27,5 @@ jobs:
       - name: Deploy to Deno Deploy
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
-        run: deno deploy --org wdd-society --app join-tool --prod --json --non-interactive
+        run: deno deploy
+        working-directory: serverless
